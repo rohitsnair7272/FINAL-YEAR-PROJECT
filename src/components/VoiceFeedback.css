@@ -1,0 +1,117 @@
+.voice-feedback {
+  font-family: Arial, sans-serif;
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 30px 25px;
+  background-color: #e3f2fd;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.voice-heading {
+  color: #0d47a1;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 25px;
+}
+
+.dropdowns {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.dropdown {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #90caf9;
+  border-radius: 5px;
+  background-color: #ffffff;
+  color: #0d47a1;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.dropdown:focus {
+  outline: none;
+  border-color: #1976d2;
+}
+
+.mic-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #0d47a1;
+  color: white;
+  font-size: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.mic-button.recording {
+  background-color: #1565c0;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(13, 71, 161, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(13, 71, 161, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(13, 71, 161, 0);
+  }
+}
+
+.text-box {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  border: 1px solid #90caf9;
+  border-radius: 6px;
+  resize: vertical;
+  font-size: 15px;
+  background-color: #ffffff;
+  color: #0d47a1;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #0d47a1;
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #1565c0;
+}
+
+.success-message {
+  color: green;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+.accuracy-message {
+  text-align: center;
+  font-size: 15px;
+  color: #333;
+  margin-top: 10px;
+}

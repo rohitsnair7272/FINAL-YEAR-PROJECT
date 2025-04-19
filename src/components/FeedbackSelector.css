@@ -1,0 +1,195 @@
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #20649b, #28a7b8); /* Gradient blue background */
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  animation: fadeIn 1.5s ease-in-out; /* Fade in the body */
+}
+
+/* Feedback Container Styling */
+.feedback-container {
+  background-color: rgba(219, 200, 218, 0.8); /* Light transparent background */
+  border-radius: 20px;
+  padding: 10px;
+  box-shadow: 10px 10px 10px rgba(9, 7, 21, 0.2);
+  width: 100%;
+  max-width: 600px;
+  opacity: 0;
+  animation: fadeInContainer 1.5s ease-in-out forwards; /* Fade in the container */
+}
+
+
+
+
+/* Centered Title */
+.centered-text {
+  font-size: 32px;
+  font-weight: bold;
+  color: #080808;
+  margin-bottom: 15px;
+  line-height: 1.4;
+  opacity: 0;
+  animation: slideInFromTop 1s ease-out 0.5s forwards; /* Slide-in animation for title */
+}
+
+/* Slogan Styling */
+.slogan {
+  font-size: 25px;
+  color: #464545;
+  margin-top: 70px;
+  font-style: italic;
+  opacity: 0;
+  animation: slideInFromLeft 1s ease-out 1s forwards; /* Slide-in animation for slogan */
+}
+
+/* Button container styling */
+.feedback-type-container {
+  display: flex;
+  justify-content: center;
+  padding: 30px 0; /* Increase padding */
+  margin-top: 70px; /* Add margin for spacing */
+  gap: 30px;
+  width: 100%;
+  margin-top: 90px;
+}
+
+/* Button Styling */
+.feedback-button {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #28587f;
+  border: none;
+  margin-bottom: -3px;
+  padding: 20px 20px;
+  font-size: 20px;
+  font-weight: bold;
+  font-style: italic;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out, background-color 0.3s ease;
+  opacity: 0;
+  animation: fadeInButtons 1s ease-out 1.5s forwards; /* Fade in and scale up buttons */
+}
+
+.feedback-button:hover {
+  transform: scale(1.1);
+  background-color: white;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+  opacity: 0.8;
+}
+
+.feedback-button:focus {
+  outline: none;
+}
+
+@media (max-width: 768px) {
+  body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      background: linear-gradient(to bottom, #a832a8, #4a148c);
+      padding: 15px;
+  }
+
+  .feedback-container {
+      width: 80%;
+      max-width: 320px;
+      background-color: rgba(209, 214, 223, 0.8);;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  .centered-text {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+  }
+
+  .slogan {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 15px;
+  }
+
+  .feedback-type-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+  }
+
+  .feedback-button {
+      width: 80%;
+      color: #2193b0;
+      padding: 8px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: none;
+      background: white;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  }
+}
+
+
+
+
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+}
+
+@keyframes fadeInContainer {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+}
+
+@keyframes slideInFromTop {
+  from {
+      transform: translateY(-50px);
+      opacity: 0;
+  }
+  to {
+      transform: translateY(0);
+      opacity: 1;
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+      transform: translateX(-50px);
+      opacity: 0;
+  }
+  to {
+      transform: translateX(0);
+      opacity: 1;
+  }
+}
+
+@keyframes fadeInButtons {
+  from {
+      opacity: 0;
+      transform: scale(0.8);
+  }
+  to {
+      opacity: 1;
+      transform: scale(1);
+  }
+}
