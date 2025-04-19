@@ -190,11 +190,11 @@ if not df.empty:
             df_copy = df.copy()
             df_copy["suggestion"] = df_copy["suggestion"].fillna("No suggestion")
             feedback_context = "\n".join(
-                f"Type: {row['type']}, Feedback: {row['content']}, Suggestion: {row['suggestion']}"
+                f"Type: {row['type']}, Feedback: {row['content']}, Suggestion: {row['suggestion']} , Category: {row['category']} , Product:{row['product']}"
                 for _, row in df_copy.iterrows()
             )
             full_prompt = f"""
-            You are 'RAL' – an expert AI advisor for shopkeepers. Your job is to help the shopkeeper by answering their questions using only the customer feedback and existing AI suggestions provided below. 
+            You are 'RAL' – an expert AI advisor for shopkeepers. Your job is to help the shopkeeper by answering their questions using the customer feedback , existing AI suggestions for them , product , category  provided below. 
             {feedback_context}
             Based on this, answer the shopkeeper's question:
             {question}
