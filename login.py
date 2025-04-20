@@ -4,9 +4,9 @@ from mongo_utils import shopkeepers_col
 import re
 import requests
 
-res = requests.get("http://51.20.122.32:8080/")
+
 st.set_page_config(page_title="Login", layout="centered")
-st.write(res.json())
+
 
 # Set page layout
 
