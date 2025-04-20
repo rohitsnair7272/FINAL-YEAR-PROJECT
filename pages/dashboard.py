@@ -229,7 +229,7 @@ else:
 st.markdown("---")
 st.markdown("<h2 style='font-size: 32px; font-style: italic;'>📂 Category Management</h2>", unsafe_allow_html=True)
 
-API_BASE_URL = "http://127.0.0.1:8080"
+API_BASE_URL = "http://51.20.122.32:8080"
 
 def fetch_categories():
     try:
