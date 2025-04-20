@@ -4,7 +4,7 @@ from mongo_utils import shopkeepers_col
 import re
 import requests
 
-res = requests.get("https://51.20.122.32:8080/")
+res = requests.get("http://51.20.122.32:8080/")
 st.write(res.json())
 
 # Set page layout
