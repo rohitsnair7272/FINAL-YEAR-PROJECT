@@ -228,7 +228,7 @@ else:
 
 # 📂 Category Management Section
 st.markdown("---")
-st.markdown("<h2 style='font-size: 32px; font-style: italic;'>📂 Category Management</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='font-size: 32px; font-style: italic;'>📂 Feedback Category Management</h2>", unsafe_allow_html=True)
 
 API_BASE_URL = "http://51.20.249.173:8080"
 
