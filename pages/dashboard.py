@@ -232,18 +232,7 @@ st.markdown("<h2 style='font-size: 32px; font-style: italic;'>📂 Feedback Cate
 
 API_BASE_URL = "http://51.20.249.173:8080"
 
-# def fetch_categories():
-#     try:
-#         response = requests.get(f"{API_BASE_URL}/get_categories")
-#         if response.status_code == 200:
-#             return response.json().get("categories", [])
-#         else:
-#             st.error("Error fetching categories from server.")
-#             return []
-#     except Exception as e:
-#         st.error(f"Error: {e}")
-#         return []
-    
+# MongoDB category fetch
 def get_categories_direct():
     try:
         return [cat["name"] for cat in category_collection.find({}, {"_id": 0, "name": 1})]
@@ -251,7 +240,11 @@ def get_categories_direct():
         st.error(f"Error fetching categories: {e}")
         return []
 
+# Initialize session state
+if "categories" not in st.session_state:
+    st.session_state.categories = get_categories_direct()
 
+# ➕ Add Category
 st.subheader("➕ Add New Category")
 with st.form("add_category_form"):
     new_category = st.text_input("Enter Category Name:")
@@ -261,26 +254,32 @@ with st.form("add_category_form"):
             res = requests.post(f"{API_BASE_URL}/add_category", data={"name": new_category.strip()})
             if res.status_code == 200:
                 st.success(f"✅ Category '{new_category.strip()}' added!")
+                st.session_state.categories = get_categories_direct()
+                st.experimental_rerun()
             else:
                 st.warning(f"⚠️ {res.json().get('detail', 'Failed to add category.')}")
         except Exception as e:
             st.error(f"Error: {e}")
 
+# ❌ Delete Category
 st.subheader("❌ Delete Existing Category")
-categories = get_categories_direct()
-if categories:
-    selected_category = st.selectbox("Select Category to Delete:", categories)
+
+if st.session_state.categories:
+    selected_category = st.selectbox("Select Category to Delete:", st.session_state.categories)
     if st.button("Delete Selected Category"):
         try:
             res = requests.post(f"{API_BASE_URL}/delete_category", data={"name": selected_category})
             if res.status_code == 200:
                 st.success(f"✅ Category '{selected_category}' deleted!")
+                st.session_state.categories = get_categories_direct()
+                st.experimental_rerun()
             else:
                 st.warning(f"⚠️ {res.json().get('detail', 'Failed to delete category.')}")
         except Exception as e:
             st.error(f"Error: {e}")
 else:
     st.info("No categories available to display.")
+
 
 # 🛍️ Product Management Section
 st.markdown("---")
