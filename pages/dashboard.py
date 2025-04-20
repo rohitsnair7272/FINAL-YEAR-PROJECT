@@ -242,6 +242,13 @@ def get_categories_direct():
 if "categories" not in st.session_state:
     st.session_state.categories = get_categories_direct()
 
+st.subheader("📋 Feedback Categories")
+categories = get_categories_direct()
+if categories:
+    st.dataframe(pd.DataFrame(categories), use_container_width=True)
+else:
+    st.info("No Feedback Category available to display.")
+
 # ➕ Add Category
 st.subheader("➕ Add New Category")
 with st.form("add_category_form"):
