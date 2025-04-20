@@ -230,8 +230,6 @@ else:
 st.markdown("---")
 st.markdown("<h2 style='font-size: 32px; font-style: italic;'>📂 Feedback Category Management</h2>", unsafe_allow_html=True)
 
-API_BASE_URL = "http://51.20.249.173:8080"
-
 # MongoDB category fetch
 def get_categories_direct():
     try:
@@ -251,12 +249,13 @@ with st.form("add_category_form"):
     add_btn = st.form_submit_button("Add Category")
     if add_btn and new_category.strip():
         try:
-            res = requests.post(f"{API_BASE_URL}/add_category", data={"name": new_category.strip()})
-            if res.status_code == 200:
+            if category_collection.find_one({"name": new_category.strip()}):
+                st.warning("⚠️ Category already exists.")
+            else:
+                category_collection.insert_one({"name": new_category.strip()})
                 st.success(f"✅ Category '{new_category.strip()}' added!")
                 st.session_state.categories = get_categories_direct()
-            else:
-                st.warning(f"⚠️ {res.json().get('detail', 'Failed to add category.')}")
+                st.experimental_rerun()
         except Exception as e:
             st.error(f"Error: {e}")
 
@@ -267,16 +266,18 @@ if st.session_state.categories:
     selected_category = st.selectbox("Select Category to Delete:", st.session_state.categories)
     if st.button("Delete Selected Category"):
         try:
-            res = requests.post(f"{API_BASE_URL}/delete_category", data={"name": selected_category})
-            if res.status_code == 200:
+            result = category_collection.delete_one({"name": selected_category})
+            if result.deleted_count > 0:
                 st.success(f"✅ Category '{selected_category}' deleted!")
                 st.session_state.categories = get_categories_direct()
+                st.experimental_rerun()
             else:
-                st.warning(f"⚠️ {res.json().get('detail', 'Failed to delete category.')}")
+                st.warning("⚠️ Category not found.")
         except Exception as e:
             st.error(f"Error: {e}")
 else:
     st.info("No categories available to display.")
+
 
 
 # 🛍️ Product Management Section
