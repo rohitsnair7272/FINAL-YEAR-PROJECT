@@ -2,6 +2,10 @@ import streamlit as st
 import hashlib
 from mongo_utils import shopkeepers_col
 import re
+import requests
+
+res = requests.get("https://51.20.122.32:8080/")
+st.write(res.json())
 
 # Set page layout
 st.set_page_config(page_title="Login", layout="centered")
