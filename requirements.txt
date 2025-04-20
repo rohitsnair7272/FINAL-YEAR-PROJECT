@@ -82,6 +82,7 @@ sniffio
 soupsieve
 starlette
 streamlit
+streamlit-nightly
 tenacity
 tensorboard
 tensorboard-data-server
