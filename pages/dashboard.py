@@ -255,7 +255,6 @@ with st.form("add_category_form"):
             if res.status_code == 200:
                 st.success(f"✅ Category '{new_category.strip()}' added!")
                 st.session_state.categories = get_categories_direct()
-                st.experimental_rerun()
             else:
                 st.warning(f"⚠️ {res.json().get('detail', 'Failed to add category.')}")
         except Exception as e:
@@ -272,7 +271,6 @@ if st.session_state.categories:
             if res.status_code == 200:
                 st.success(f"✅ Category '{selected_category}' deleted!")
                 st.session_state.categories = get_categories_direct()
-                st.experimental_rerun()
             else:
                 st.warning(f"⚠️ {res.json().get('detail', 'Failed to delete category.')}")
         except Exception as e:
