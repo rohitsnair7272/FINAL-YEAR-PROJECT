@@ -262,7 +262,7 @@ with st.form("add_category_form"):
                 category_collection.insert_one({"name": new_category.strip()})
                 st.success(f"✅ Category '{new_category.strip()}' added!")
                 st.session_state.categories = get_categories_direct()
-                st.experimental_rerun()
+                # st.experimental_rerun()
         except Exception as e:
             st.error(f"Error: {e}")
 
@@ -277,7 +277,7 @@ if st.session_state.categories:
             if result.deleted_count > 0:
                 st.success(f"✅ Category '{selected_category}' deleted!")
                 st.session_state.categories = get_categories_direct()
-                st.experimental_rerun()
+                # st.experimental_rerun()
             else:
                 st.warning("⚠️ Category not found.")
         except Exception as e:
