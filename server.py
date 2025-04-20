@@ -30,7 +30,7 @@ TWILIO_WHATSAPP_NUMBER = os.getenv("TWILIO_WHATSAPP_NUMBER")  # e.g., 'whatsapp:
 client = Client(TWILIO_SID, TWILIO_AUTH_TOKEN)
 
 # ✅ MongoDB Setup
-MONGO_URI = "mongodb://127.0.0.1:27017"
+MONGO_URI = os.getenv("MONGO_URI")
 mongo_client = MongoClient(MONGO_URI)
 feedback_db = mongo_client["FeedbackDB"]
 feedback_collection = feedback_db["feedbacks"]

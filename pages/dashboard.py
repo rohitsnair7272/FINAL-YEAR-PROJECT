@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 # ✅ Load environment variables
 load_dotenv()
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://127.0.0.1:27017")
+MONGO_URI = os.getenv("MONGO_URI")
 GEMINI_API_KEY = os.getenv("REACT_APP_GEMINI_API_KEY")
 
 # ✅ Streamlit Page Config
