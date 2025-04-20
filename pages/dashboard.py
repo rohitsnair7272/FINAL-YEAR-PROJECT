@@ -57,6 +57,7 @@ client = MongoClient(MONGO_URI)
 db = client["FeedbackDB"]
 feedback_collection = db["feedbacks"]
 product_collection = db["Products"]
+category_collection = db["feedback_categories"]
 
 # ✅ Fetch Feedback Data
 feedback_data = list(feedback_collection.find({}, {"_id": 0}))
@@ -231,17 +232,25 @@ st.markdown("<h2 style='font-size: 32px; font-style: italic;'>📂 Category Mana
 
 API_BASE_URL = "http://51.20.249.173:8080"
 
-def fetch_categories():
+# def fetch_categories():
+#     try:
+#         response = requests.get(f"{API_BASE_URL}/get_categories")
+#         if response.status_code == 200:
+#             return response.json().get("categories", [])
+#         else:
+#             st.error("Error fetching categories from server.")
+#             return []
+#     except Exception as e:
+#         st.error(f"Error: {e}")
+#         return []
+    
+def get_categories_direct():
     try:
-        response = requests.get(f"{API_BASE_URL}/get_categories")
-        if response.status_code == 200:
-            return response.json().get("categories", [])
-        else:
-            st.error("Error fetching categories from server.")
-            return []
+        return [cat["name"] for cat in category_collection.find({}, {"_id": 0, "name": 1})]
     except Exception as e:
-        st.error(f"Error: {e}")
+        st.error(f"Error fetching categories: {e}")
         return []
+
 
 st.subheader("➕ Add New Category")
 with st.form("add_category_form"):
@@ -258,7 +267,7 @@ with st.form("add_category_form"):
             st.error(f"Error: {e}")
 
 st.subheader("❌ Delete Existing Category")
-categories = fetch_categories()
+categories = get_categories_direct()
 if categories:
     selected_category = st.selectbox("Select Category to Delete:", categories)
     if st.button("Delete Selected Category"):
