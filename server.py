@@ -31,6 +31,7 @@ client = Client(TWILIO_SID, TWILIO_AUTH_TOKEN)
 
 # ✅ MongoDB Setup
 MONGO_URI = os.getenv("MONGO_URI")
+print("Mongo URI:", MONGO_URI)  # Debugging line to check the Mongo URI
 mongo_client = MongoClient(MONGO_URI)
 feedback_db = mongo_client["FeedbackDB"]
 feedback_collection = feedback_db["feedbacks"]
