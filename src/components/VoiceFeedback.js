@@ -6,7 +6,6 @@ const VoiceFeedback = () => {
   const [recording, setRecording] = useState(false);
   const [text, setText] = useState("");
   const [originalSpeech, setOriginalSpeech] = useState("");
-  const [accuracy, setAccuracy] = useState(null);
   const [aiSuggestion, setAiSuggestion] = useState("");
   const [audioUrl, setAudioUrl] = useState(null);
   const [submitted, setSubmitted] = useState(false);
@@ -46,17 +45,7 @@ const VoiceFeedback = () => {
     fetchProducts();
   }, []);
 
-  const calculateAccuracy = (original, recognized) => {
-    const originalWords = original.trim().split(/\s+/);
-    const recognizedWords = recognized.trim().split(/\s+/);
-    let matches = 0;
-    originalWords.forEach((word, i) => {
-      if (recognizedWords[i] && recognizedWords[i].toLowerCase() === word.toLowerCase()) {
-        matches++;
-      }
-    });
-    return originalWords.length > 0 ? ((matches / originalWords.length) * 100).toFixed(2) : 0;
-  };
+  
 
   const startSpeechRecognition = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -135,8 +124,7 @@ const VoiceFeedback = () => {
       if (!response.ok) throw new Error(data.error || "Submission failed");
 
       setAiSuggestion(data.ai_suggestion);
-      const calculatedAccuracy = calculateAccuracy(originalSpeech, text);
-      setAccuracy(calculatedAccuracy);
+      
       setSubmitted(true);
 
       setTimeout(() => navigate("/"), 2000);
