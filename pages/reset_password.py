@@ -46,17 +46,19 @@ else:
                     {"$set": {"password": hash_password(new_password)},
                      "$unset": {"reset_token": "", "reset_token_expiry": ""}}
                 )
-                # Success message with a hyperlink to the login page
-                st.success(
-                    "✅ Password reset successfully! You can now login. "
-                    "[Go to Login Page](https://shopkeeper-dashboard.streamlit.app/)"
+                st.success("✅ Password reset successfully! You can now login.")
+                # Link that opens in the same tab
+                st.markdown(
+                    '<a href="https://shopkeeper-dashboard.streamlit.app/" '
+                    'style="text-decoration: underline; color: blue;" target="_self">'
+                    'Go to Login Page</a>',
+                    unsafe_allow_html=True
                 )
-                
-                # JavaScript for auto redirect after 3 seconds
+                # Auto redirect after 3 seconds
                 st.markdown("""
                     <script type="text/javascript">
                         setTimeout(function() {
                             window.location.href = 'https://shopkeeper-dashboard.streamlit.app/';
-                        }, 3000);  // 3000 milliseconds = 3 seconds
+                        }, 3000);
                     </script>
                 """, unsafe_allow_html=True)
