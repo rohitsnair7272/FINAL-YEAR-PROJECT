@@ -229,8 +229,8 @@ async def delete_category(name: str = Form(...)):
 # ✅ Route: Get All Products
 @app.get("/get_products")
 async def get_products():
-    products = list(product_collection.find({}, {"_id": 0, "name": 1}))
-    return {"products": [prod["name"] for prod in products]}
+    products = list(product_collection.find({}, {"_id": 0, "name": 1, "price": 1}))
+    return {"products": products}
 
 # ✅ Route: Add Product
 @app.post("/add_product")

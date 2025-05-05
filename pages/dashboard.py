@@ -57,7 +57,6 @@ client = MongoClient(MONGO_URI)
 db = client["FeedbackDB"]
 feedback_collection = db["feedbacks"]
 product_collection = db["Products"]
-category_collection = db["feedback_categories"]
 
 # ✅ Fetch Feedback Data
 feedback_data = list(feedback_collection.find({}, {"_id": 0}))
@@ -228,64 +227,51 @@ else:
 
 # 📂 Category Management Section
 st.markdown("---")
-st.markdown("<h2 style='font-size: 32px; font-style: italic;'>📂 Feedback Category Management</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='font-size: 32px; font-style: italic;'>📂 Category Management</h2>", unsafe_allow_html=True)
 
-# MongoDB category fetch
-def get_categories_direct():
+API_BASE_URL = "http://51.20.122.32:8080"
+
+def fetch_categories():
     try:
-        return [cat["name"] for cat in category_collection.find({}, {"_id": 0, "name": 1})]
+        response = requests.get(f"{API_BASE_URL}/get_categories")
+        if response.status_code == 200:
+            return response.json().get("categories", [])
+        else:
+            st.error("Error fetching categories from server.")
+            return []
     except Exception as e:
-        st.error(f"Error fetching categories: {e}")
+        st.error(f"Error: {e}")
         return []
 
-# Initialize session state
-if "categories" not in st.session_state:
-    st.session_state.categories = get_categories_direct()
-
-st.subheader("📋 Feedback Categories")
-categories = get_categories_direct()
-if categories:
-    st.dataframe(pd.DataFrame(categories), use_container_width=True)
-else:
-    st.info("No Feedback Category available to display.")
-
-# ➕ Add Category
 st.subheader("➕ Add New Category")
 with st.form("add_category_form"):
     new_category = st.text_input("Enter Category Name:")
     add_btn = st.form_submit_button("Add Category")
     if add_btn and new_category.strip():
         try:
-            if category_collection.find_one({"name": new_category.strip()}):
-                st.warning("⚠️ Category already exists.")
-            else:
-                category_collection.insert_one({"name": new_category.strip()})
+            res = requests.post(f"{API_BASE_URL}/add_category", data={"name": new_category.strip()})
+            if res.status_code == 200:
                 st.success(f"✅ Category '{new_category.strip()}' added!")
-                st.session_state.categories = get_categories_direct()
-                # st.experimental_rerun()
+            else:
+                st.warning(f"⚠️ {res.json().get('detail', 'Failed to add category.')}")
         except Exception as e:
             st.error(f"Error: {e}")
 
-# ❌ Delete Category
 st.subheader("❌ Delete Existing Category")
-
-if st.session_state.categories:
-    selected_category = st.selectbox("Select Category to Delete:", st.session_state.categories)
+categories = fetch_categories()
+if categories:
+    selected_category = st.selectbox("Select Category to Delete:", categories)
     if st.button("Delete Selected Category"):
         try:
-            result = category_collection.delete_one({"name": selected_category})
-            if result.deleted_count > 0:
+            res = requests.post(f"{API_BASE_URL}/delete_category", data={"name": selected_category})
+            if res.status_code == 200:
                 st.success(f"✅ Category '{selected_category}' deleted!")
-                st.session_state.categories = get_categories_direct()
-                # st.experimental_rerun()
             else:
-                st.warning("⚠️ Category not found.")
+                st.warning(f"⚠️ {res.json().get('detail', 'Failed to delete category.')}")
         except Exception as e:
             st.error(f"Error: {e}")
 else:
     st.info("No categories available to display.")
-
-
 
 # 🛍️ Product Management Section
 st.markdown("---")
@@ -308,17 +294,21 @@ else:
 st.subheader("➕ Add New Product")
 with st.form("add_product_form"):
     p_name = st.text_input("Enter Product Name:")
+    p_price = st.number_input("Enter Product Price ($):", min_value=0.0, step=0.5)
     add_product_btn = st.form_submit_button("Add Product")
+    
     if add_product_btn:
         if not p_name.strip():
             st.warning("Please enter a valid product name.")
+        elif p_price <= 0:
+            st.warning("Please enter a valid price greater than 0.")
         else:
             try:
                 if product_collection.find_one({"name": p_name.strip()}):
                     st.warning("Product already exists.")
                 else:
-                    product_collection.insert_one({"name": p_name.strip()})
-                    st.success(f"✅ Product '{p_name}' added successfully!")
+                    product_collection.insert_one({"name": p_name.strip(), "price": p_price})
+                    st.success(f"✅ Product '{p_name}' added with price ${p_price:.2f}!")
             except Exception as e:
                 st.error(f"Failed to add product: {e}")
 
