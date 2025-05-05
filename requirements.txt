@@ -101,7 +101,7 @@ streamlit-nightly==1.44.2.dev20250418
 tenacity==9.1.2
 tensorboard==2.18.0
 tensorboard-data-server==0.7.2
-tensorflow==2.19.0
+tensorflow==2.18.0
 termcolor==3.0.1
 tf_keras==2.19.0
 toml==0.10.2
