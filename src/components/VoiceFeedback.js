@@ -24,7 +24,7 @@ const VoiceFeedback = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8080/get_categories");
+        const res = await fetch("https://server-backend-nry1.onrender.com/get_categories");
         const data = await res.json();
         setCategories(data.categories || []);
       } catch (err) {
@@ -34,7 +34,7 @@ const VoiceFeedback = () => {
 
     const fetchProducts = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8080/get_products");
+        const res = await fetch("https://server-backend-nry1.onrender.com/get_products");
         const data = await res.json();
         setProducts(data.products || []);
       } catch (err) {
@@ -125,7 +125,7 @@ const VoiceFeedback = () => {
     }
 
     try {
-      const response = await fetch("http://127.0.0.1:8080/submit_voice_feedback", {
+      const response = await fetch("https://server-backend-nry1.onrender.com/submit_voice_feedback", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({ text, category, product }),
@@ -147,59 +147,68 @@ const VoiceFeedback = () => {
   };
 
   return (
-    <div className="voice-feedback">
-      <h1 className="voice-heading">Voice Feedback</h1>
-
-      <div className="dropdowns">
-        <select value={category} onChange={(e) => setCategory(e.target.value)} className="dropdown">
-          <option value="">Select Category</option>
-          {categories.map((cat, index) => (
-            <option key={index} value={cat}>{cat}</option>
-          ))}
-        </select>
-
-        <select value={product} onChange={(e) => setProduct(e.target.value)} className="dropdown">
-          <option value="">Select Product</option>
-          {products.map((prod, index) => (
-            <option key={index} value={prod}>{prod}</option>
-          ))}
-        </select>
-      </div>
-
-      <div className={`mic-button ${recording ? "recording" : ""}`} onClick={recording ? stopRecording : startRecording}>
-        🎤
-      </div>
-
-      {recording && (
-        <div className="waveform">
-          <span></span><span></span><span></span><span></span><span></span>
+    <div className="page-container">
+      {submitted ? (
+        <div className="thank-you-wrapper">
+          <div className="thank-you-card">
+            <h3 className="thank-you-title">✅ Thank you for your feedback!</h3>
+            <p className="redirect-text">You'll be redirected shortly...</p>
+          </div>
         </div>
-      )}
-
-      {audioUrl && (
-        <audio controls>
-          <source src={audioUrl} type="audio/wav" />
-          Your browser does not support the audio element.
-        </audio>
-      )}
-
-      <textarea
-        className="text-box"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="Your speech will appear here..."
-      />
-
-      {!submitted ? (
-        <button onClick={handleSubmit}>Submit Feedback</button>
       ) : (
-        <>
-          <p className="success-message">✅ Thank you for your response!</p>
-          <p className="accuracy-message">🎯 Speech Recognition Accuracy: <strong>{accuracy}%</strong></p>
-        </>
+        <div className="voice-feedback">
+          <h1 className="voice-heading">Voice Feedback</h1>
+  
+          <div className="dropdowns">
+            <select value={category} onChange={(e) => setCategory(e.target.value)} className="dropdown">
+              <option value="">Select Category</option>
+              {categories.map((cat, index) => (
+                <option key={index} value={cat}>{cat}</option>
+              ))}
+            </select>
+  
+            <select value={product} onChange={(e) => setProduct(e.target.value)} className="dropdown">
+              <option value="">Select Product</option>
+              {products.map((prod, index) => (
+                <option key={index} value={prod.name}>
+                {prod.name} - ₹{prod.price}
+              </option>
+              ))}
+            </select>
+          </div>
+
+          
+  
+          <div className={`mic-button ${recording ? "recording" : ""}`} onClick={recording ? stopRecording : startRecording}>
+            🎤
+          </div>
+  
+          {recording && (
+            <div className="waveform">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+          )}
+  
+          {audioUrl && (
+            <audio controls>
+              <source src={audioUrl} type="audio/wav" />
+              Your browser does not support the audio element.
+            </audio>
+          )}
+  
+          <textarea
+            className="text-box"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Your speech will appear here..."
+          />
+  
+          <button onClick={handleSubmit}>Submit Feedback</button>
+        </div>
       )}
     </div>
   );
+  
 };
 
 export default VoiceFeedback;

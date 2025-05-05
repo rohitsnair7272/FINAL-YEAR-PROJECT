@@ -30,7 +30,13 @@ function App() {
       ]);
     };
 
-    history = history.map(({ role, text }) => ({ role, parts: [{ text }] }));
+    history = history
+  .filter(({ text }) => typeof text === "string" && text.trim().length > 0)
+  .map(({ role, text }) => ({
+    role,
+    parts: [{ text }],
+  }));
+
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -45,7 +51,7 @@ function App() {
       const data = await response.json();
       if (!response.ok) throw new Error(data?.error.message || "Something went wrong!");
 
-      const apiResponseText = data.candidates[0].content.parts[0].text.replace(/\*\*(.*?)\*\*/g, "$1").trim();
+      const apiResponseText = data.candidates[0].content.parts[0].text.replace(/\\(.?)\\*/g, "$1").trim();
       updateHistory(apiResponseText);
     } catch (error) {
       updateHistory(error.message, true);
@@ -53,10 +59,19 @@ function App() {
   };
 
   useEffect(() => {
-    if (chatBodyRef.current) {
-      chatBodyRef.current.scrollTo({ top: chatBodyRef.current.scrollHeight, behavior: "smooth" });
-    }
-  }, [chatHistory]);
+    const loadCompanyInfo = async () => {
+      const info = await companyInfo();
+      setChatHistory([
+        {
+          role: "model",
+          text: info,
+          hideInChat: true,
+        },
+      ]);
+    };
+    loadCompanyInfo();
+  }, []);
+  
 
   return (
     <Router>

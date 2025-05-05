@@ -1,4 +1,4 @@
-export async function getCompanyInfo() {
+export async function companyInfo() {
   const res = await fetch("https://server-backend-nry1.onrender.com/get_products");
   const data = await res.json();
   const products = data.products;

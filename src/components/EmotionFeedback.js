@@ -22,6 +22,9 @@ const EmotionFeedback = () => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
 
+  // Update with the Render URL
+  const backendUrl = "https://emotion-backend-iwzy.onrender.com"; // Replace with your Render app URL
+
   useEffect(() => {
     startWebcam();
     fetchCategories();
@@ -79,7 +82,7 @@ const EmotionFeedback = () => {
       formData.append("image", blob, "captured.jpg");
 
       try {
-        const res = await axios.post("http://127.0.0.1:5000/detect_emotion", formData);
+        const res = await axios.post(`${backendUrl}/detect_emotion`, formData);
         const detectedEmotion = res.data.emotion;
         setEmotion(detectedEmotion);
 
@@ -104,7 +107,7 @@ const EmotionFeedback = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:8080/get_categories");
+      const res = await axios.get(`https://server-backend-nry1.onrender.com/get_categories`);
       setCategories(res.data.categories || []);
     } catch (err) {
       console.error("Category fetch error:", err);
@@ -113,7 +116,7 @@ const EmotionFeedback = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:8080/get_products");
+      const res = await axios.get(`https://server-backend-nry1.onrender.com/get_products`);
       setProducts(res.data.products || []);
     } catch (err) {
       console.error("Product fetch error:", err);
@@ -149,7 +152,7 @@ const EmotionFeedback = () => {
     }
 
     try {
-      await axios.post("http://127.0.0.1:8080/submit_emotion_feedback", formData);
+      await axios.post(`https://server-backend-nry1.onrender.com/submit_emotion_feedback`, formData);
       setFeedbackSubmitted(true);
       setTimeout(() => navigate("/"), 2000);
     } catch (error) {
@@ -199,9 +202,13 @@ const EmotionFeedback = () => {
 
                 <select value={product} onChange={(e) => setProduct(e.target.value)}>
                   <option value="">Select Product</option>
-                  {products.map((prod, i) => <option key={i} value={prod}>{prod}</option>)}
+                  {products.map((prod, i) => <option key={i} value={prod.name}>
+                {prod.name} - ₹{prod.price}
+              </option>)}
                 </select>
               </div>
+
+              
 
               <div className="feedback-box">
                 <textarea
