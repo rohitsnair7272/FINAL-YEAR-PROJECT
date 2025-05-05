@@ -86,6 +86,7 @@ streamlit-nightly
 tenacity
 tensorboard
 tensorboard-data-server
+tensorflow
 termcolor
 tf_keras
 toml
