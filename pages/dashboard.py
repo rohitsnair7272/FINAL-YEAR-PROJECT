@@ -294,21 +294,21 @@ else:
 st.subheader("➕ Add New Product")
 with st.form("add_product_form"):
     p_name = st.text_input("Enter Product Name:")
-    p_price = st.number_input("Enter Product Price ($):", min_value=0.0, step=0.5)
+    p_price = st.number_input("Enter Product Price (₹):", min_value=0.0, step=1.0, format="%.2f")
     add_product_btn = st.form_submit_button("Add Product")
     
     if add_product_btn:
         if not p_name.strip():
             st.warning("Please enter a valid product name.")
         elif p_price <= 0:
-            st.warning("Please enter a valid price greater than 0.")
+            st.warning("Please enter a valid price greater than ₹0.")
         else:
             try:
                 if product_collection.find_one({"name": p_name.strip()}):
                     st.warning("Product already exists.")
                 else:
                     product_collection.insert_one({"name": p_name.strip(), "price": p_price})
-                    st.success(f"✅ Product '{p_name}' added with price ${p_price:.2f}!")
+                    st.success(f"✅ Product '{p_name}' added with price ₹{p_price:.2f}!")
             except Exception as e:
                 st.error(f"Failed to add product: {e}")
 
