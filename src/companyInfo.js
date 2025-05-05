@@ -3,7 +3,7 @@ export async function companyInfo() {
   const data = await res.json();
   const products = data.products;
 
-  const menuItems = products.map(p => `  - ${p.name} - $${p.price.toFixed(2)}`).join("\n");
+  const menuItems = products.map(p => `  - ${p.name} - ₹${p.price.toFixed(2)}`).join("\n");
 
   return `
 Introduction:
