@@ -84,8 +84,6 @@ starlette
 streamlit
 streamlit-nightly
 tenacity
-tensorboard
-tensorflow
 termcolor
 tf_keras
 toml
