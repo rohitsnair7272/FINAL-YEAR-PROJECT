@@ -1,53 +1,51 @@
 import streamlit as st
 import hashlib
 from mongo_utils import shopkeepers_col
-import re
+import urllib.parse
+from datetime import datetime
 
 st.set_page_config(page_title="Reset Password", layout="centered")
 st.title("🔁 Reset Your Password")
-# Completely hide the sidebar and its space
-hide_sidebar_style = """
+
+# Hide sidebar
+st.markdown("""
     <style>
-        /* Hide sidebar and collapse its space */
-        [data-testid="stSidebar"] {
+        [data-testid="stSidebar"], [data-testid="stSidebarNav"], .css-1d391kg {
             display: none !important;
         }
-        [data-testid="stSidebarNav"] {
-            display: none !important;
-        }
-        .css-1d391kg {  /* hamburger menu */
-            display: none !important;
-        }
-        .block-container {
-            padding-left: 1rem !important;
-        }
-        header[data-testid="stHeader"] {
+        .block-container, header[data-testid="stHeader"] {
             padding-left: 1rem !important;
         }
     </style>
-"""
-st.markdown(hide_sidebar_style, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
-email = st.text_input("📧 Enter your registered email")
-new_password = st.text_input("🔐 New Password", type="password")
-confirm_password = st.text_input("🔐 Confirm Password", type="password")
+# Extract token from URL
+query_params = st.experimental_get_query_params()
+token = query_params.get("token", [None])[0]
 
-def hash_password(password):
-    return hashlib.sha256(password.encode()).hexdigest()
-
-if st.button("Reset Password"):
-    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-        st.warning("Please enter a valid email.")
-    elif new_password != confirm_password:
-        st.error("Passwords do not match.")
+if not token:
+    st.error("❌ Invalid or missing token.")
+else:
+    user = shopkeepers_col.find_one({"reset_token": token})
+    if not user:
+        st.error("❌ Invalid token.")
+    elif datetime.utcnow() > user.get("reset_token_expiry", datetime.min):
+        st.error("❌ Token has expired.")
     else:
-        user = shopkeepers_col.find_one({"email": email})
-        if user:
-            shopkeepers_col.update_one(
-                {"email": email},
-                {"$set": {"password": hash_password(new_password)}}
-            )
-            st.success("✅ Password reset successfully! You can now login.")
-        else:
-            st.error("❌ Email not found in our records.")
-        st.switch_page("login.py")
+        st.success("✅ Token verified! You can now reset your password.")
+        new_password = st.text_input("🔐 New Password", type="password")
+        confirm_password = st.text_input("🔐 Confirm Password", type="password")
+
+        def hash_password(password):
+            return hashlib.sha256(password.encode()).hexdigest()
+
+        if st.button("Reset Password"):
+            if new_password != confirm_password:
+                st.error("Passwords do not match.")
+            else:
+                shopkeepers_col.update_one(
+                    {"email": user["email"]},
+                    {"$set": {"password": hash_password(new_password)},
+                     "$unset": {"reset_token": "", "reset_token_expiry": ""}}
+                )
+                st.success("✅ Password reset successfully! You can now login.")
