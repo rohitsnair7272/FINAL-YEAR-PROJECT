@@ -1,7 +1,6 @@
 import streamlit as st
 import hashlib
 from mongo_utils import shopkeepers_col
-import urllib.parse
 from datetime import datetime
 
 st.set_page_config(page_title="Reset Password", layout="centered")
@@ -19,9 +18,8 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Extract token from URL
-query_params = st.experimental_get_query_params()
-token = query_params.get("token", [None])[0]
+# Extract token from URL using st.query_params
+token = st.query_params.get("token", None)
 
 if not token:
     st.error("❌ Invalid or missing token.")
