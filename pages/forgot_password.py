@@ -44,7 +44,7 @@ if st.button("Send Reset Link"):
 
         # Send email
         sender_email = st.secrets["SENDER_EMAIL"]
-        sender_password = st.secrets["SENDER_PASSWORD"]
+        sender_password = st.secrets["SENDER_APP_PASSWORD"]
         reset_link = f"{st.secrets['app_url']}/reset_password?token={token}"
 
         message = EmailMessage()
