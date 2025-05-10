@@ -190,7 +190,7 @@ if not df.empty:
             df_copy = df.copy()
             df_copy["suggestion"] = df_copy["suggestion"].fillna("No suggestion")
             feedback_context = "\n".join(
-                f"Type: {row['type']}, Feedback: {row['content']}, Suggestion: {row['suggestion']} , Category: {row['category']} , Product:{row['product']}"
+                f"Type: {row['type']}, Feedback: {row['content']}, Suggestion: {row['suggestion']} , Category: {row['category']} , Product:{row['product']} , TimeStamp:{row['timestamp']}"
                 for _, row in df_copy.iterrows()
             )
             full_prompt = f"""
